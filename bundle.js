@@ -26518,10 +26518,8 @@ function getBooks() {
                 books.push({ id: book.id, ...book.data() });
             });
             booksContainer.innerHTML = elemenContainer;
-            console.log(books);
         })
         .catch((error) => {
-            console.log(error);
         });
 }
 
@@ -26555,17 +26553,11 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         const title = formAdd.title.value;
         const author = formAdd.author.value;
-        console.log([title, author]);
         (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.addDoc)(colRef, {
             title: title,
             author: author,
         })
-            .then(e => {
-                console.log(e);
-                getBooks();
-            })
             .catch(err => {
-                console.log(err);
             })
             .finally(() => {
                 formAdd.reset();
@@ -26580,11 +26572,9 @@ document.addEventListener('click', event => {
         const deleteRef = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, 'books', btnDelete.getAttribute('id'));
         (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc)(deleteRef)
             .then(() => {
-                console.log('berhasil');
                 getBooks();
             })
             .catch(err => {
-                console.log(err);
             })
     }
 });
