@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatAPP</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="book-container"></div>
+
+    <form id="formAdd">
+        <h3>Add book</h3>
+        <input required type="text" name="title">
+        <input required type="text" name="author">
+        <button>add</button>
+    </form>
+
+    <!-- <script src="dist/bundle.js"></script> -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "./firebase-firestore-lite.js";
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyDbk8VWOTEB-WwK8-De9Ggr_5HzGsz6o9c",
+          authDomain: "simple-chat-f90e9-fc9b8.firebaseapp.com",
+          projectId: "simple-chat-f90e9",
+          storageBucket: "simple-chat-f90e9.appspot.com",
+          messagingSenderId: "178469536395",
+          appId: "1:178469536395:web:7543f4dc41e0a1d24f4a8e"
+        };
+        const firebaseApp = initializeApp(firebaseConfig);
+        const db = getFirestore(firebaseApp);
+        const colRef = collection(db, 'books');
+        const booksContainer = document.getElementById('book-container');
+
+        function getBooks(){
+            getDocs(colRef)
+            .then((snapshot) => {
+                booksContainer.innerHTML = '';
+
+                const books = [];
+                let elemenContainer = ``;
+                snapshot.docs.forEach((book)=>{
+                    const bookElement = `
+                    <div class="book">
+                        <div class="data-container">
+                            <h3>${book.data()['title']}</h3>
+                            <p>${book.data()['author']}</p>
+                        </div>
+                        <button class="delete-btn" id="${book.id}">delete</button>
+                    </div>
+                    `;
+                    elemenContainer += bookElement;
+    
+                    books.push({id:book.id, ...book.data()});
+                });
+                booksContainer.innerHTML = elemenContainer;
+                console.log(books);
+            })
+            .catch((error)=>{
+                console.log(error);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", ()=>{
+            getBooks();
+
+            const formAdd = document.getElementById('formAdd');
+            formAdd.addEventListener('submit', (e)=>{
+                e.preventDefault();
+                const title = formAdd.title.value;
+                const author = formAdd.author.value;
+                console.log([title, author]);
+                addDoc(colRef, {
+                    title: title,
+                    author: author,
+                })
+                .then(e=>{
+                    console.log(e);
+                    getBooks();
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
+                .finally(()=>{
+                    formAdd.reset();
+                })
+            });
+        });
+
+        document.addEventListener('click', event => {
+            const btnDelete = event.target.closest('.delete-btn');
+            
+            if(btnDelete){
+                // console.log(btnDelete.getAttribute('id'));
+                const deleteRef = doc(db, 'books', btnDelete.getAttribute('id'));
+                deleteDoc(deleteRef)
+                .then((res)=>{
+                    console.log('berhasil');
+                    // btnDelete.parentElement.remove();
+                    getBooks();
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+        });
+    </script>
+</body>
+</html>
