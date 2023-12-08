@@ -26557,8 +26557,6 @@ document.addEventListener("DOMContentLoaded", () => {
             title: title,
             author: author,
         })
-            .catch(err => {
-            })
             .finally(() => {
                 formAdd.reset();
             })
