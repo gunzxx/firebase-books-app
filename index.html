@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Book APP</title>
+    <title>Firebase Chat APP</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="shortcut icon" href="https://static.vecteezy.com/system/resources/thumbnails/003/171/355/small/objective-lens-icon-with-six-rainbow-colors-vector.jpg" type="image/x-icon">
 </head>
 <body>
-    <div id="book-container"></div>
+    <div id="login-container">
+        Silahkan login dengan:
+        <button id="google-btn">Google</button>
+    </div>
+    <div id="logout-container">
+        <button id="logout-btn">Logout</button>
+    </div>
+    <div id="chat-container"></div>
 
     <form id="formAdd">
-        <h3>Add book</h3>
-        <input required type="text" placeholder="title" name="title">
-        <input required type="text" placeholder="author" name="author">
-        <button>add</button>
+        <h3>Message :</h3>
+        <div class="form-message">
+            <input autofocus required type="text" placeholder="message" name="message">
+            <button>send</button>
+        </div>
     </form>
 
     <script src="./bundle.js"></script>
