@@ -26482,6 +26482,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var firebase_firestore__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! firebase/firestore */ "./node_modules/firebase/firestore/dist/esm/index.esm.js");
 
 
+// import { BookElement } from './component/BookElement';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDbk8VWOTEB-WwK8-De9Ggr_5HzGsz6o9c",
@@ -26496,8 +26497,11 @@ const db = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getFirestore)(fire
 const colRef = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.collection)(db, 'books');
 const booksContainer = document.getElementById('book-container');
 
+// query
+const myQuery = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.query)(colRef, (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.orderBy)('title','asc'), (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.orderBy)('createdAt'));
+
 function getBooks() {
-    (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getDocs)(colRef)
+    (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getDocs)(myQuery)
         .then((snapshot) => {
             booksContainer.innerHTML = '';
 
@@ -26520,10 +26524,11 @@ function getBooks() {
             booksContainer.innerHTML = elemenContainer;
         })
         .catch((error) => {
+            console.log(error);
         });
 }
 
-(0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.onSnapshot)(colRef, (snapshot) => {
+(0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.onSnapshot)(myQuery, (snapshot) => {
     booksContainer.innerHTML = '';
 
     const books = [];
@@ -26556,6 +26561,7 @@ document.addEventListener("DOMContentLoaded", () => {
         (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.addDoc)(colRef, {
             title: title,
             author: author,
+            createdAt: (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.serverTimestamp)(),
         })
             .finally(() => {
                 formAdd.reset();
@@ -26569,10 +26575,8 @@ document.addEventListener('click', event => {
     if (btnDelete) {
         const deleteRef = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.doc)(db, 'books', btnDelete.getAttribute('id'));
         (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.deleteDoc)(deleteRef)
-            .then(() => {
-                getBooks();
-            })
             .catch(err => {
+                console.log(err);
             })
     }
 });
