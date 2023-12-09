@@ -26498,7 +26498,7 @@ const colRef = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.collection)(db
 const booksContainer = document.getElementById('book-container');
 
 // query
-const myQuery = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.query)(colRef, (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.orderBy)('title','asc'), (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.orderBy)('createdAt'));
+const myQuery = (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.query)(colRef, (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.orderBy)('title','asc'));
 
 function getBooks() {
     (0,firebase_firestore__WEBPACK_IMPORTED_MODULE_1__.getDocs)(myQuery)
